@@ -1,0 +1,47 @@
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+import org.jsoup.Jsoup;
+
+public class extractlinks {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		@SuppressWarnings("resource")
+		Scanner obj = new Scanner(System.in);
+
+		System.out.println("Enter Site url and press Enter");
+		
+		try {
+			for (String link : findLinks(obj.nextLine())) {
+			     System.out.println(link);
+			 }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	 }
+
+	 private static <WebElements> Set<String> findLinks(String url) throws IOException {
+
+	     Set<String> links = new HashSet<>();
+
+	    org.jsoup.nodes.Document doc = Jsoup.connect(url).data("query", "Java")
+	    				.userAgent("Mozilla").cookie("auth", "token")
+	    				.timeout(3000).get();
+
+	     org.jsoup.select.Elements elements = ((org.jsoup.nodes.Element) doc).select("a[href]");
+	     for (org.jsoup.nodes.Element element : elements) {
+	         links.add(element.attr("href"));
+	     }
+
+	     return links;
+
+	 }
+
+	}
+
+
